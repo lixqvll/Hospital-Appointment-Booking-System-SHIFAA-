@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <h1>شِفاء</h1>
+
+    <p id="validationMessage"></p> 
+
+    <form id="loginForm" method="POST" action="login.php">
+        <label>أدخل الايميل</label>
+        <input type="email" name="email" id="email" required><br><br> 
+
+        <label>كلمة السر</label>
+        <input type="password" name="password" required><br><br>
+
+        <button type="submit">تسجيل الدخول</button>
+    </form>
+
+    <a href="register.html">ليس لديك حساب؟ إنشاء حساب جديد</a>
+
+</div>
+
+<script>
+    function showValidation(message) {
+        const validationMessage = document.getElementById('validationMessage');
+        if (validationMessage) {
+            validationMessage.textContent = message;
+            validationMessage.style.display = 'block';
+        }
+    }
+    
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        
+        const emailInput = document.getElementById('email');
+        if (urlParams.get('email') && emailInput) {
+            emailInput.value = urlParams.get('email');
+        }
+        
+        let errorMessage = '';
+
+        if (error) {
+            switch(error) {
+                case 'missing_fields':
+                    errorMessage = 'يرجى تعبئة كافة الحقول المطلوبة (البريد الإلكتروني وكلمة المرور).'; 
+                    break;
+                case 'login_fail':
+                    errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.'; 
+                    break;
+                case 'not_logged_in':
+                    errorMessage = 'يجب تسجيل الدخول لإجراء هذه العملية.';
+                    break;
+                default:
+                    return; 
+            }
+            
+            showValidation(errorMessage);
+            history.replaceState(null, '', 'login.html');
+        }
+    };
+</script>
+
+</body>
+</html>
